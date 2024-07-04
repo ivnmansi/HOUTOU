@@ -1,0 +1,83 @@
+/*----ATAQUE ESPECIAL PERSONAJE PRINCIPAL (RAYO)----*/
+void ataque_especial(ALLEGRO_EVENT *event, ALLEGRO_TIMER **timer_segundos, int *contadorespecial, int *contadorduracionespecial, bool *especialactivo, char *elcontadordelataque, personaje *principal, int *auxespecial_x){
+   int i;
+
+     //contadores
+         if(event->timer.source == *timer_segundos){
+           
+           if((*contadorespecial)!=-1){// no se puede tirar
+            (*contadorespecial)++;
+            if((*contadorespecial)==10){// ya se puede tirar a los 10 segundos (si contadorespecial=-1)
+              (*contadorespecial)=-1;
+              (*contadorduracionespecial)=0;
+            }
+           }
+
+           if(*contadorduracionespecial>0){ //se está tirando el ataque especial
+             (*contadorduracionespecial)++;
+             if(*contadorduracionespecial==2){ //se termina el tiempo
+               *contadorespecial=0; //se inicia el tiempo de espera
+               *especialactivo=false;
+             }
+           }
+           printf("%d, %d", *contadorespecial, *contadorduracionespecial);
+
+          }
+
+          snprintf(elcontadordelataque, 10, "%d", (*contadorespecial-10)*-1);
+
+
+
+          if(key[ALLEGRO_KEY_X]==true&&*contadorespecial==-1){
+            if((*especialactivo)==false){
+               *contadorduracionespecial=1;
+               for(i=0;i<maxproyectiles;i++){
+                principal->especial[i].activo=false;
+                }
+                *auxespecial_x=principal->x+20;
+               *especialactivo=true;
+               
+              }
+          } else
+
+          if((*especialactivo)==true){
+
+            for(i=0;i<maxproyectiles;i++){
+                  if(principal->especial[i].activo==false){
+                        principal->especial[i].x=*auxespecial_x;
+                        principal->especial[i].y=principal->y;
+                        principal->especial[i].activo=true;
+                        break;
+                    }
+               }
+            }
+
+            for(i=0;i<maxproyectiles;i++){
+                    if(principal->especial[i].activo==true){
+                        principal->especial[i].y -= 10;
+                        
+                        if(principal->especial[i].y<-16){
+                            principal->especial[i].activo=false;
+                        }
+                    } else {
+                        principal->especial[i].y=principal->y;
+                        principal->especial[i].x=principal->x+20;
+                    }
+                 }
+
+
+            // movimiento hitboxs
+            for(i=0;i<maxproyectiles;i++){
+            if(principal->especial[i].activo==true){
+            principal->especial[i].hitbox.x=principal->especial[i].x+principal->especial[i].hitbox.arreglo_x;
+            principal->especial[i].hitbox.y=principal->especial[i].y+principal->especial[i].hitbox.arreglo_y;
+            } else {
+            principal->especial[i].hitbox.x=-100;
+            principal->especial[i].hitbox.y=-100;
+            }
+           }
+
+          
+
+}
+/*--------------------------------------------- */
