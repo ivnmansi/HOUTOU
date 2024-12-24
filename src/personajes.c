@@ -90,14 +90,14 @@ void movimiento_hitbox_proyectiles(personaje *personaje){
 /*INICIALIZACION DE IMAGENES*/
 void iniciarimagenesjugador(personaje *principal){
   int i=0;
-   principal->imagen=al_load_bitmap("imagenes/sprites/principal1.png"); /*imagen del personaje que se muestra en pantalla*/
-   principal->estatico=al_load_bitmap("imagenes/sprites/principal1.png");
-   principal->izquierda=al_load_bitmap("imagenes/sprites/principal3.png");
-   principal->derecha=al_load_bitmap("imagenes/sprites/principal2.png");
+   principal->imagen=al_load_bitmap("../assets/images/sprites/principal1.png"); /*imagen del personaje que se muestra en pantalla*/
+   principal->estatico=al_load_bitmap("../assets/images/sprites/principal1.png");
+   principal->izquierda=al_load_bitmap("../assets/images/sprites/principal3.png");
+   principal->derecha=al_load_bitmap("../assets/images/sprites/principal2.png");
 
-   principal->imagen_proyectil = al_load_bitmap("imagenes/obstaculos/proyectilprincipal.png");
+   principal->imagen_proyectil = al_load_bitmap("../assets/images/obstaculos/proyectilprincipal.png");
    for(i=0;i<maxproyectiles;i++){
-    principal->especial[i].imagen = al_load_bitmap("imagenes/obstaculos/rayo.png");
+    principal->especial[i].imagen = al_load_bitmap("../assets/images/obstaculos/rayo.png");
    }
 }
 
@@ -371,7 +371,7 @@ void leernumeroenemigos(int numenemigospornivel[10], int *numenemigostotal){
   int totalenemigos=0,totalniveles=0;
   int filascolumnas[10][10] = {0};
 
-     FILE *file=fopen("enemigos.txt", "r");
+     FILE *file=fopen("../data/enemigos.txt", "r");
     if(file!=NULL) {
         // Lee datos del archivo
         for(i=0;i<10;i++){
@@ -416,7 +416,7 @@ void leernumeroenemigos(int numenemigospornivel[10], int *numenemigostotal){
 void leerenemigos(int numenemigos,int numenemigospornivel[10],personaje enemigos[numenemigos]){
   int i=0,j=0,k=0,l=0;
   int aux[100];
-    FILE *file=fopen("enemigos.txt", "r");
+    FILE *file=fopen("../data/enemigos.txt", "r");
     if(file!=NULL) {
 
         // Leer todos los valores en aux
@@ -453,7 +453,7 @@ int i=0,j=0;
     enemigos[i].velocidad=2;
     enemigos[i].velocidad_angular=i;
     enemigos[i].choqueborde=1; /*empieza yendo a la derecha*/
-    enemigos[i].imagen=al_load_bitmap("imagenes/sprites/enemigos3.png");
+    enemigos[i].imagen=al_load_bitmap("../assets/images/sprites/enemigos3.png");
     enemigos[i].vida=10; /*vida enemigo*/
     enemigos[i].activo=true;
     //hitbox payasos
@@ -471,11 +471,11 @@ int i=0,j=0;
         for(j=0;j<maxproyectiles;j++){
 
             if(j%2==0){
-            enemigos[i].proyectiles[j].imagen=al_load_bitmap("imagenes/obstaculos/proyectil_enemigo.png");
+            enemigos[i].proyectiles[j].imagen=al_load_bitmap("../assets/images/obstaculos/proyectil_enemigo.png");
             } else {
-                enemigos[i].proyectiles[j].imagen=al_load_bitmap("imagenes/obstaculos/proyectil2.png");
+                enemigos[i].proyectiles[j].imagen=al_load_bitmap("../assets/images/obstaculos/proyectil2.png");
             }
-            enemigos[i].proyectiles[j].destruido=al_load_bitmap("imagenes/obstaculos/proyectil2muerto.png");
+            enemigos[i].proyectiles[j].destruido=al_load_bitmap("../assets/images/obstaculos/proyectil2muerto.png");
             
           
             enemigos[i].proyectiles[j].aceleracion_angular=0;
@@ -496,7 +496,7 @@ int i=0,j=0;
       if(enemigos[i].tipoenemigo==2){
     enemigos[i].velocidad=3;
     enemigos[i].velocidad_angular=i;
-    enemigos[i].imagen=al_load_bitmap("imagenes/sprites/enemigos1.png");
+    enemigos[i].imagen=al_load_bitmap("../assets/images/sprites/enemigos1.png");
     enemigos[i].vida=30; /*vida enemigo*/
     enemigos[i].activo=true;
     //hitbox bufones
@@ -513,8 +513,8 @@ int i=0,j=0;
         // >> inicialización proyectiles
         for(j=0;j<maxproyectiles;j++){
             
-            enemigos[i].proyectiles[j].imagen=al_load_bitmap("imagenes/obstaculos/proyectilbufon.png");
-            enemigos[i].proyectiles[j].destruido=al_load_bitmap("imagenes/obstaculos/proyectilbufondestruido.png");
+            enemigos[i].proyectiles[j].imagen=al_load_bitmap("../assets/images/obstaculos/proyectilbufon.png");
+            enemigos[i].proyectiles[j].destruido=al_load_bitmap("../assets/images/obstaculos/proyectilbufondestruido.png");
             
           
             enemigos[i].proyectiles[j].aceleracion_angular=0;
@@ -534,7 +534,7 @@ int i=0,j=0;
       if(enemigos[i].tipoenemigo==3){
     enemigos[i].velocidad=5;
     enemigos[i].velocidad_angular=0;
-    enemigos[i].imagen=al_load_bitmap("imagenes/sprites/enemigos2.png");
+    enemigos[i].imagen=al_load_bitmap("../assets/images/sprites/enemigos2.png");
     enemigos[i].vida=30; /*vida enemigo*/
     enemigos[i].activo=true;
     //hitbox bufones
@@ -551,8 +551,8 @@ int i=0,j=0;
         // >> inicialización proyectiles
         for(j=0;j<maxproyectiles;j++){
             
-            enemigos[i].proyectiles[j].imagen=al_load_bitmap("imagenes/obstaculos/proyectilmimo.png");
-            enemigos[i].proyectiles[j].destruido=al_load_bitmap("imagenes/obstaculos/proyectilmimodestruido.png");
+            enemigos[i].proyectiles[j].imagen=al_load_bitmap("../assets/images/obstaculos/proyectilmimo.png");
+            enemigos[i].proyectiles[j].destruido=al_load_bitmap("../assets/images/obstaculos/proyectilmimodestruido.png");
             
           
             enemigos[i].proyectiles[j].aceleracion_angular=0;
@@ -574,7 +574,7 @@ int i=0,j=0;
       if(enemigos[i].tipoenemigo==5){
     enemigos[i].velocidad=7;
     enemigos[i].velocidad_angular=0;
-    enemigos[i].imagen=al_load_bitmap("imagenes/sprites/boss.png");
+    enemigos[i].imagen=al_load_bitmap("../assets/images/sprites/boss.png");
     enemigos[i].vida=60; /*vida enemigo*/
     enemigos[i].activo=true;
     enemigos[i].contadorataque=0;
@@ -593,8 +593,8 @@ int i=0,j=0;
         // >> inicialización proyectiles
         for(j=0;j<maxproyectiles;j++){
             
-            enemigos[i].proyectiles[j].imagen=al_load_bitmap("imagenes/obstaculos/proyectilboss.png");
-            enemigos[i].proyectiles[j].destruido=al_load_bitmap("imagenes/obstaculos/proyectilbossdestruido.png");
+            enemigos[i].proyectiles[j].imagen=al_load_bitmap("../assets/images/obstaculos/proyectilboss.png");
+            enemigos[i].proyectiles[j].destruido=al_load_bitmap("../assets/images/obstaculos/proyectilbossdestruido.png");
             
           
             enemigos[i].proyectiles[j].aceleracion_angular=0;

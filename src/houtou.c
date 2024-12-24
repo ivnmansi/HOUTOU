@@ -1,7 +1,4 @@
-// PARA COMPILAR: gcc houtou.c -o prueba.exe -lallegro -lallegro_font -lallegro_ttf -lallegro_image -lallegro_primitives -lallegro_audio -lallegro_acodec -lallegro_dialog
-
 #include "config.h"
-
 
 bool key[ALLEGRO_KEY_MAX] = { false };
 bool dibujar=false;
@@ -48,18 +45,18 @@ int main(){
    /*---------------------------------------------------*/
 
    /*> MEDIA DEL JUEGO EN GENERAL-------------*/
-    ALLEGRO_FONT* font = al_load_ttf_font("font.ttf", 25, 1); /*font principal*/
-    ALLEGRO_BITMAP *fondo_nivel = al_load_bitmap("imagenes/fondo_nivel.png"); /*fondo del juego*/
-    ALLEGRO_BITMAP *fondo_encima = al_load_bitmap("imagenes/fondoencima.png");
+    ALLEGRO_FONT* font = al_load_ttf_font("../assets/font.ttf", 25, 1); /*font principal*/
+    ALLEGRO_BITMAP *fondo_nivel = al_load_bitmap("../assets/images/fondo_nivel.png"); /*fondo del juego*/
+    ALLEGRO_BITMAP *fondo_encima = al_load_bitmap("../assets/images/fondoencima.png");
     int animacion_fondo=0; /*variable con la que se hará la animacion del fondo*/
     int animacion_fondo_encima=0;
 
-    ALLEGRO_SAMPLE* musicafondo = al_load_sample("musicafondo.mp3"); /*musica de fondo*/
+    ALLEGRO_SAMPLE* musicafondo = al_load_sample("../assets/music/musicafondo.mp3"); /*musica de fondo*/
     ALLEGRO_SAMPLE_INSTANCE* musicafondoinstance = al_create_sample_instance(musicafondo);
     al_attach_sample_instance_to_mixer(musicafondoinstance, al_get_default_mixer());
     al_set_sample_instance_playmode(musicafondoinstance, ALLEGRO_PLAYMODE_LOOP);
     
-    ALLEGRO_SAMPLE* musicamenu=al_load_sample("musicamenu.mp3");
+    ALLEGRO_SAMPLE* musicamenu=al_load_sample("../assets/music/musicamenu.mp3");
     ALLEGRO_SAMPLE_INSTANCE* musicamenuinstance = al_create_sample_instance(musicamenu);
     al_attach_sample_instance_to_mixer(musicamenuinstance, al_get_default_mixer());
     al_set_sample_instance_playmode(musicamenuinstance, ALLEGRO_PLAYMODE_LOOP);
@@ -67,14 +64,14 @@ int main(){
 
 
    /*---------MENU Y CONTROLES---------*/
-    ALLEGRO_BITMAP* controles=al_load_bitmap("imagenes/controles.png");
-    ALLEGRO_BITMAP* menu=al_load_bitmap("imagenes/menu1.png");
-    ALLEGRO_BITMAP* menu1=al_load_bitmap("imagenes/menu1.png");
-    ALLEGRO_BITMAP* menu2=al_load_bitmap("imagenes/menu2.png");
-    ALLEGRO_BITMAP* menu3=al_load_bitmap("imagenes/menu3.png");
+    ALLEGRO_BITMAP* controles=al_load_bitmap("../assets/images/controles.png");
+    ALLEGRO_BITMAP* menu=al_load_bitmap("../assets/images/menu1.png");
+    ALLEGRO_BITMAP* menu1=al_load_bitmap("../assets/images/menu1.png");
+    ALLEGRO_BITMAP* menu2=al_load_bitmap("../assets/images/menu2.png");
+    ALLEGRO_BITMAP* menu3=al_load_bitmap("../assets/images/menu3.png");
     int opcion_menu=1;
 
-    ALLEGRO_BITMAP* ganarperder=al_load_bitmap("imagenes/ganarperder.png");
+    ALLEGRO_BITMAP* ganarperder=al_load_bitmap("../assets/images/ganarperder.png");
    /*---------------------------------*/
 
 
@@ -95,15 +92,15 @@ int main(){
        ALLEGRO_USTR *nombre; /*donde se registra el nombre del jugador*/
        nombre=al_ustr_new("");
        int unichar;
-       ALLEGRO_BITMAP *fondoranking = al_load_bitmap("imagenes/ranking.png");
+       ALLEGRO_BITMAP *fondoranking = al_load_bitmap("../assets/images/ranking.png");
        char rankingchar[10][50];
        
    /*--------------imagenes de inicio de nivel-----------------------*/
-     ALLEGRO_BITMAP* stage=al_load_bitmap("imagenes/stage1.png");
-     ALLEGRO_BITMAP* stage1=al_load_bitmap("imagenes/stage1.png");
-     ALLEGRO_BITMAP* stage2=al_load_bitmap("imagenes/stage2.png");
-     ALLEGRO_BITMAP* stage3=al_load_bitmap("imagenes/stage3.png");
-     ALLEGRO_BITMAP* stage4=al_load_bitmap("imagenes/stage4.png");
+     ALLEGRO_BITMAP* stage=al_load_bitmap("../assets/images/stage1.png");
+     ALLEGRO_BITMAP* stage1=al_load_bitmap("../assets/images/stage1.png");
+     ALLEGRO_BITMAP* stage2=al_load_bitmap("../assets/images/stage2.png");
+     ALLEGRO_BITMAP* stage3=al_load_bitmap("../assets/images/stage3.png");
+     ALLEGRO_BITMAP* stage4=al_load_bitmap("../assets/images/stage4.png");
     /*----------------------------------------------------*/
 
 
@@ -115,7 +112,7 @@ int main(){
    personaje principal;
    iniciarimagenesjugador(&principal);
    float velocidad_principal_real=1;
-   ALLEGRO_BITMAP *bolainmunidad=al_load_bitmap("imagenes/sprites/inmunidad.png");
+   ALLEGRO_BITMAP *bolainmunidad=al_load_bitmap("../assets/images/sprites/inmunidad.png");
    ALLEGRO_COLOR inmunidadroja = al_map_rgba_f(112, 0, 0, 0); /*color inmunidad cuando te da una bala*/
    // INMUNIDAD
    bool inmunidad=false;
@@ -129,7 +126,7 @@ int main(){
    int contadorduracionespecial=0;
    int auxespecial_x;
    bool especialactivo=false;
-   ALLEGRO_BITMAP* imagenataqueactivo=al_load_bitmap("imagenes/ataqueactivo.png");
+   ALLEGRO_BITMAP* imagenataqueactivo=al_load_bitmap("../assets/images/ataqueactivo.png");
    char elcontadordelataque[10];
       
        // >> timer del proyectil
@@ -137,7 +134,7 @@ int main(){
       al_register_event_source(queue, al_get_timer_event_source(timer_proyectil_principal));
       bool espacio_disparos=false;
     // > VIDAS
-    ALLEGRO_BITMAP *vida= al_load_bitmap("imagenes/sprites/vida.png");
+    ALLEGRO_BITMAP *vida= al_load_bitmap("../assets/images/sprites/vida.png");
    /*------------------------------------------------------*/
 
 

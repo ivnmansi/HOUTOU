@@ -401,7 +401,7 @@ void dispararleproyectiles(personaje *personaje1 ,personaje *enemigo, int *puntu
        powerup->activo=false;
        powerup->aceleracion=1;
        powerup->aceleracion_angular=0;
-       powerup->imagen=al_load_bitmap("imagenes/obstaculos/powerupsheet.png");
+       powerup->imagen=al_load_bitmap("../assets/images/obstaculos/powerupsheet.png");
        powerup->tipo=0;
        //hitbox
            powerup->hitbox.x=0;
@@ -495,7 +495,7 @@ void dispararleproyectiles(personaje *personaje1 ,personaje *enemigo, int *puntu
 /*----------LECTURA DEL RANKING------------*/
 void leerranking(ranking ranking1[10]){
   int i=0,j=0,k=0;
-    FILE *file=fopen("ranking.txt", "r+b");
+    FILE *file=fopen("../data/ranking.txt", "r+b");
     if(file!=NULL) {
 
         for (i=0;i<10;i++){
@@ -524,7 +524,7 @@ void ordenar_ranking(ranking ranking1[10]){
      }
     }
 
-    FILE *file=fopen("ranking.txt", "r+b");
+    FILE *file=fopen("../data/ranking.txt", "r+b");
     if(file!=NULL) {
 
         for (i=0;i<10;i++){
