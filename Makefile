@@ -15,10 +15,13 @@ all: $(OBJ_FILES)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c -o $@ $^ $(INCLUDE)
 
-.PHONY: clean folders send
+.PHONY: clean folders
 clean:
-	rm -f $(OBJ_FILES)
-	rm -f build/$(EXEC)
+	@del /Q /F $(subst /,\,$(OBJ_FILES))
+	@del /Q /F $(subst /,\,$(BUILD_DIR)/$(EXEC))
 
 folders:
-	mkdir -p src obj incs build
+	@if not exist $(SRC_DIR) mkdir $(SRC_DIR)
+	@if not exist $(OBJ_DIR) mkdir $(OBJ_DIR)
+	@if not exist $(INCS_DIR) mkdir $(INCS_DIR)
+	@if not exist $(BUILD_DIR) mkdir $(BUILD_DIR)

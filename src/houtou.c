@@ -1,12 +1,5 @@
 #include "config.h"
 
-bool key[ALLEGRO_KEY_MAX] = { false };
-bool dibujar=false;
-
-int numenemigospornivel[10] = {0};
-int numenemigos = 0;
- 
-/*INICIO MAIN-------------------------------------------------------------*/
 int main(){
 
  al_init();
@@ -19,37 +12,37 @@ int main(){
  al_install_audio();
  al_reserve_samples(2);
 
-
- int i=0,j=0,k=0;
+ int i=0,j=0;
  
-
    /*> VENTANA-------------------------*/
     al_set_new_display_flags(ALLEGRO_WINDOWED | ALLEGRO_RESIZABLE);
     ALLEGRO_DISPLAY *display = al_create_display(x_display,y_display); 
-    al_set_window_title(display,"HOUTOU"); /*titulo ventana*/
-    bool GameRunning=true; /*para ver si el juego se cierra o no*/
+    al_set_window_title(display,WINDOW_TITLE); /* Window title */
+    /* icon */
+    ALLEGRO_BITMAP *icon = al_load_bitmap("../assets/icon.png");
+    if(icon){
+      al_set_display_icon(display,icon);
+    }
+    else {
+      al_show_native_message_box(display, "Error", "Error", "No se pudo cargar el icono", NULL, 0);
+    }
    /*---------------------------------*/
    
    /*> TIMERS, EVENTOS PRINCIPALES------------------------*/
     ALLEGRO_TIMER* fps = al_create_timer(1.0 / 60); /*fps del juego*/ 
     ALLEGRO_TIMER* timer_segundos = al_create_timer(1.0); /*contador de segundos*/
-    ALLEGRO_TIMER* limitador_menu = al_create_timer(1.0/10);
     ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue(); /*cola principal*/
     al_register_event_source(queue, al_get_keyboard_event_source()); 
     al_register_event_source(queue, al_get_display_event_source(display));
     al_register_event_source(queue, al_get_timer_event_source(fps));
     al_register_event_source(queue, al_get_timer_event_source(timer_segundos));
-     al_register_event_source(queue, al_get_timer_event_source(limitador_menu));
     ALLEGRO_EVENT event;
-    bool redraw;
    /*---------------------------------------------------*/
 
    /*> MEDIA DEL JUEGO EN GENERAL-------------*/
     ALLEGRO_FONT* font = al_load_ttf_font("../assets/font.ttf", 25, 1); /*font principal*/
     ALLEGRO_BITMAP *fondo_nivel = al_load_bitmap("../assets/images/fondo_nivel.png"); /*fondo del juego*/
     ALLEGRO_BITMAP *fondo_encima = al_load_bitmap("../assets/images/fondoencima.png");
-    int animacion_fondo=0; /*variable con la que se hará la animacion del fondo*/
-    int animacion_fondo_encima=0;
 
     ALLEGRO_SAMPLE* musicafondo = al_load_sample("../assets/music/musicafondo.mp3"); /*musica de fondo*/
     ALLEGRO_SAMPLE_INSTANCE* musicafondoinstance = al_create_sample_instance(musicafondo);
@@ -94,6 +87,8 @@ int main(){
        int unichar;
        ALLEGRO_BITMAP *fondoranking = al_load_bitmap("../assets/images/ranking.png");
        char rankingchar[10][50];
+
+       int next_nivel=-1;
        
    /*--------------imagenes de inicio de nivel-----------------------*/
      ALLEGRO_BITMAP* stage=al_load_bitmap("../assets/images/stage1.png");
@@ -163,7 +158,6 @@ int main(){
     al_start_timer(timer_segundos);
     al_start_timer(timer_proyectil_principal);
     al_start_timer(timer_proyectil_enemigos);
-    al_start_timer(limitador_menu);
     /*-------------------*/
     
 
@@ -174,9 +168,10 @@ int main(){
     while(GameRunning){
        // para que se cierre al presionar X 
        while (al_get_next_event(queue, &event)){
-       if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
+        if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
         GameRunning=false;
-       } else {
+        }
+        else {
         
          // MECANICA JUEGO
          srand(time(0) + 10);
@@ -187,14 +182,13 @@ int main(){
            if(se_gano==true){
             puntuacionfinal=puntuacionfinal*10;
            }
-           if(event.timer.source == limitador_menu){
-           if(key[ALLEGRO_KEY_ENTER]){
-              nivel++;
-            }
+
+           if(event.type == ALLEGRO_EVENT_KEY_DOWN && event.keyboard.keycode==ALLEGRO_KEY_ENTER){
+            next_nivel++;
            }
+
           }
 
-         else
     /*----------------------------------*/
 
     /*-------------RANKING---------------*/
@@ -218,12 +212,12 @@ int main(){
                 }
 
                // borrar
-               if (key[ALLEGRO_KEY_BACKSPACE] && al_ustr_length(nombre)>0 && event.timer.source == limitador_menu) {
+               if (event.keyboard.keycode == ALLEGRO_KEY_BACKSPACE && al_ustr_length(nombre)>0 && event.type==ALLEGRO_EVENT_KEY_DOWN) {
                 al_ustr_remove_chr(nombre, al_ustr_offset(nombre, al_ustr_length(nombre)-1));
                } else
 
                // nombre listo
-               if(key[ALLEGRO_KEY_ENTER] && event.timer.source == limitador_menu){
+               if(event.keyboard.keycode == ALLEGRO_KEY_ENTER && event.type==ALLEGRO_EVENT_KEY_DOWN){
 
                  strncpy(ranking[9].nombre, al_cstr(nombre), 9);
                  ranking[9].puntaje=puntuacionfinal;
@@ -243,13 +237,13 @@ int main(){
          for(i=0;i<10;i++) {
           snprintf(rankingchar[i], sizeof(rankingchar[i]), "%d. %s - %d", i + 1, ranking[i].nombre, ranking[i].puntaje);
           }
-           if(event.timer.source == limitador_menu){
-               if(key[ALLEGRO_KEY_ENTER]==true){
-                  nivel++;
+           if(event.type == ALLEGRO_EVENT_KEY_DOWN){
+               if(event.keyboard.keycode==ALLEGRO_KEY_ENTER){
+                  next_nivel++;
                } 
            }
         }
-       } else
+       }
     /*-------------------------*/
     
 
@@ -267,51 +261,54 @@ int main(){
           }
           /*-------*/
 
-           if(event.timer.source == limitador_menu){
-             if(opcion_menu==1){ //cuando se está en JUGAR
+          if(event.type == ALLEGRO_EVENT_KEY_DOWN){
+            switch (event.keyboard.keycode){
+              case ALLEGRO_KEY_DOWN:
+                if(opcion_menu<3){
+                  opcion_menu++;
+                }
+                break;
+              case ALLEGRO_KEY_UP:
+                if(opcion_menu>1){
+                  opcion_menu--;
+                }
+                break;
+              case ALLEGRO_KEY_ENTER:
+                if(opcion_menu==1){ //JUGAR
+                  next_nivel=0;
+                } else
+                if(opcion_menu==2){ //RANKING
+                  next_nivel=-2;
+                } else
+                if(opcion_menu==3){ //SALIR
+                  GameRunning=false;
+                }
+                break;
+            }
+          }
+
+          switch(opcion_menu){
+            case 1:
               menu=menu1;
-              if(key[ALLEGRO_KEY_DOWN]){
-                opcion_menu++;
-              } else
-              if(key[ALLEGRO_KEY_ENTER]){
-                nivel=0;
-              }
-
-
-             } else
-             if(opcion_menu==2){ //cuando se está en ranking
+              break;
+            case 2:
               menu=menu2;
-              if(key[ALLEGRO_KEY_DOWN]){
-                opcion_menu++;
-              } else
-              if(key[ALLEGRO_KEY_UP]){
-                opcion_menu--;
-              } else
-              if(key[ALLEGRO_KEY_ENTER]){
-                nivel=-2;
-              }
-              
-
-             } else
-             if(opcion_menu==3){
+              break;
+            case 3:
               menu=menu3;
-              if(key[ALLEGRO_KEY_UP]){
-                opcion_menu--;
-              } else
-              if(key[ALLEGRO_KEY_ENTER]){
-                GameRunning=false;
-              }
-             }
-           }
-         } else
+              break;
+          }
+
+         }
     /*-----------MENU DE CONTROLES--------------*/
          if(nivel==0){
-          if(event.timer.source == limitador_menu){
-               if(key[ALLEGRO_KEY_ENTER]==true){
-                  nivel++;
+          
+          if(event.type == ALLEGRO_EVENT_KEY_DOWN){
+               if(event.keyboard.keycode==ALLEGRO_KEY_ENTER){
+                  next_nivel++;
                } 
           }
-         } else
+         }
 
   /*-------------INICIO DEL JUEGO-----------*/
         if(nivel>0){  
@@ -406,7 +403,7 @@ int main(){
              espaciado_disparoenemigos=true;
            } 
 
-           comportamientoenemigos(numenemigos,&nivel,enemigos, espaciado_disparoenemigos, &inicionivelcontador, &pasarnivel, principal, &puntuacion, &se_gano, segundos);
+           comportamientoenemigos(numenemigos,&nivel,enemigos, espaciado_disparoenemigos, &inicionivelcontador, &pasarnivel, principal, &puntuacion, &se_gano, segundos, &next_nivel);
 /*-----------------------------------------------------------*/
 
 
@@ -464,12 +461,12 @@ int main(){
         if(principal.vida<0){ //perder
           puntuacion=puntuacion*nivel;
           se_gano=false;
-          nivel=-3;
+          next_nivel=-3;
           break;
         } else
         if(se_gano==true){ //ganar
           puntuacion=puntuacion*nivel;
-          nivel=-3;
+          next_nivel=-3;
           break;
         }
         //------------
@@ -483,6 +480,7 @@ int main(){
           }
          }
 
+         verificadorteclado(&event, &principal);
 
 
    }
@@ -499,7 +497,7 @@ int main(){
        //---
 
 
-    if(redraw){
+    if(redraw && al_is_event_queue_empty(queue)){
 
       if(nivel>0){
           //--------animacion fondo----------------
@@ -709,11 +707,11 @@ int main(){
         }
          //------------------------------
 
+         nivel=next_nivel; //cambio de nivel
+
        }
 
-        //verificador de que si se está presionando el teclado
-        verificadorteclado(&event, &principal);
-        //----------------------------------------------------
+        
 
        }
     }
@@ -768,7 +766,6 @@ int main(){
     al_destroy_bitmap(menu1);
     al_destroy_bitmap(menu2);
     al_destroy_bitmap(menu3);
-    al_destroy_timer(limitador_menu);
     al_destroy_bitmap(ganarperder);
     al_destroy_sample(musicafondo);
     al_destroy_sample_instance(musicafondoinstance);
@@ -776,6 +773,7 @@ int main(){
     al_destroy_sample_instance(musicamenuinstance);
     al_ustr_free(nombre);
     al_destroy_bitmap(fondoranking);
+    al_destroy_bitmap(icon);
 
   
     return 0;

@@ -16,7 +16,7 @@ void dispararleproyectiles(personaje *personaje1 ,personaje *enemigo, int *puntu
  }
 
 /*------------ COMPORTAMIENTO DE ENEMIGOS-------------*/
- void comportamientoenemigos(int numenemigos, int *nivel, personaje enemigos[numenemigos], bool espaciado_disparoenemigos, int *inicionivelcontador, int *pasarnivel, personaje principal, int *puntuacion, bool *se_gano, int segundos){
+ void comportamientoenemigos(int numenemigos, int *nivel, personaje enemigos[numenemigos], bool espaciado_disparoenemigos, int *inicionivelcontador, int *pasarnivel, personaje principal, int *puntuacion, bool *se_gano, int segundos, int* next_nivel){
    int i,j,k;
    int numerocorte_abajo=0,numerocorte_arriba=0;
    int numeroenemigosnivel;
@@ -388,7 +388,7 @@ void dispararleproyectiles(personaje *personaje1 ,personaje *enemigo, int *puntu
 
             (*pasarnivel)=0;
             *inicionivelcontador=0;
-            (*nivel)++;
+            (*next_nivel)++;
            }
     }
 
@@ -494,7 +494,7 @@ void dispararleproyectiles(personaje *personaje1 ,personaje *enemigo, int *puntu
 
 /*----------LECTURA DEL RANKING------------*/
 void leerranking(ranking ranking1[10]){
-  int i=0,j=0,k=0;
+  int i=0;
     FILE *file=fopen("../data/ranking.txt", "r+b");
     if(file!=NULL) {
 

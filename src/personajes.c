@@ -8,10 +8,11 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "personajes.h"
 #include "config.h"
 
- 
+#define DURACION_ESPECIAL_SEGUNDOS 2
+
+
 
 /*---------------- FUNCIONES GENERALES-----------------------------------*/
 
@@ -74,7 +75,6 @@ void movimiento_hitbox_proyectiles(personaje *personaje){
 
 /*COLISION PERSONAJE-PERSONAJE*/
    bool colisionpersonajes(personaje *personaje1 ,personaje *enemigo){
-    int i;
     if(enemigo->activo==true){
      if(  (personaje1->hitbox.x < enemigo->hitbox.x+enemigo->hitbox.ancho)&&(personaje1->hitbox.x+personaje1->hitbox.ancho > enemigo->hitbox.x)&&  (personaje1->hitbox.y < enemigo->hitbox.y+enemigo->hitbox.alto)&&(personaje1->hitbox.y+personaje1->hitbox.alto > enemigo->hitbox.y)  ){
         return true;
@@ -250,9 +250,10 @@ void ataque_especial(ALLEGRO_EVENT *event, ALLEGRO_TIMER *timer_segundos, int *c
            }
            if(*contadorduracionespecial>0){ //se está tirando el ataque especial
              (*contadorduracionespecial)++;
-             if(*contadorduracionespecial==2){ //se termina el tiempo
-               *contadorespecial=0; //se inicia el tiempo de espera
-               *especialactivo=false;
+             if(*contadorduracionespecial >= DURACION_ESPECIAL_SEGUNDOS){
+                *contadorespecial=0; //se inicia el tiempo de espera
+                *especialactivo=false;
+                *contadorduracionespecial = 0;
              }
            }
           }
@@ -264,7 +265,6 @@ void ataque_especial(ALLEGRO_EVENT *event, ALLEGRO_TIMER *timer_segundos, int *c
                for(i=0;i<maxproyectiles;i++){
                 principal->especial[i].activo=false;
                 }
-                *auxespecial_x=principal->x+20;
                *especialactivo=true;
                
               }
@@ -274,17 +274,20 @@ void ataque_especial(ALLEGRO_EVENT *event, ALLEGRO_TIMER *timer_segundos, int *c
 
             for(i=0;i<maxproyectiles;i++){
                   if(principal->especial[i].activo==false){
-                        principal->especial[i].x=*auxespecial_x;
-                        principal->especial[i].y=principal->y;
+                        principal->especial[i].x=principal->x+20;
+                        principal->especial[i].y=principal->y-14*i;
                         principal->especial[i].activo=true;
-                        break;
                     }
                }
+            } else{
+            for(i=0;i<maxproyectiles;i++)
+                principal->especial[i].activo=false;
             }
 
             for(i=0;i<maxproyectiles;i++){
                     if(principal->especial[i].activo==true){
-                        principal->especial[i].y -= 10;
+                        principal->especial[i].x = principal->x+20;
+                        principal->especial[i].y = principal->y-14*i;
                         
                         if(principal->especial[i].y<0){
                             principal->especial[i].activo=false;
